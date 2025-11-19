@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PET - Jornal para quem ama pets</title>
+  <style>
+    :root{--primary-text:#8B5E3C;--subtext:#9CA3AF;--cta:#6DC8FF;--bg:#ffffff;--bg-accent:#FFF8ED;--dark:#111827}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;color:var(--dark);background:var(--bg-accent)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;position:sticky;top:0;background:linear-gradient(180deg,var(--bg) 0%,#F9FAFB 100%);box-shadow:0 8px 24px rgba(17,24,39,.08),0 2px 6px rgba(17,24,39,.04);z-index:10}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand-badge{background:#D9A97B;color:#5A3D27;padding:6px 10px;border-radius:10px;font-weight:800;font-size:14px}
+    .brand-logo{height:56px;width:auto;border-radius:10px;display:block}
+    .nav-links{display:flex;gap:24px}
+    .nav-links a{text-decoration:none;color:#2B2B2B;font-weight:500;transition:color .2s ease}
+    .nav-links a:hover{color:var(--cta)}
+    .nav-actions{display:flex;align-items:center;gap:12px}
+    .icon{font-size:18px;color:#374151;line-height:1}
+    .btn{appearance:none;border:none;cursor:pointer;border-radius:12px;padding:10px 16px;font-weight:700}
+    .btn-outline{background:var(--bg);color:#1F2937;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(17,24,39,.06)}
+    .btn-cta{background:var(--cta);color:#0B4A6A;box-shadow:0 6px 16px rgba(109,200,255,.35)}
+    .mobile-toggle{display:none;background:#F3F4F6;color:#1F2937;border:1px solid #E5E7EB;border-radius:10px;padding:8px 10px}
+    .hero{position:relative;overflow:hidden;padding:24px}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;max-width:1100px;margin:0 auto}
+    .hero h1{margin:8px 0 12px;font-size:44px;line-height:1.1;color:var(--primary-text);letter-spacing:.2px}
+    .hero p.lead{margin:0 0 16px;color:var(--subtext);font-size:18px}
+    .cta-row{display:flex;gap:12px;margin:8px 0 14px;flex-wrap:nowrap}
+    .features{display:flex;gap:18px;color:var(--subtext);font-weight:600}
+    .card{background:var(--bg-accent);border-radius:22px;padding:18px;display:flex;align-items:center;justify-content:center}
+    .card img{width:100%;height:420px;object-fit:cover;border-radius:18px}
+    .highlights{max-width:1100px;margin:8px auto 40px;padding:0 24px}
+    .hl-title{font-size:32px;line-height:1.2;margin:12px 0 4px;color:var(--primary-text);text-align:center}
+    .hl-subtitle{text-align:center;color:var(--subtext);margin-bottom:18px}
+    .hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .hl-card{position:relative;background:var(--bg);border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(17,24,39,.08);cursor:pointer}
+    .hl-card img{width:100%;height:160px;object-fit:cover;transition:transform .35s ease}
+    .hl-card:hover img{transform:scale(1.08)}
+    .hl-card:hover .hl-content h3{color:var(--cta)}
+    .hl-badges{position:absolute;top:10px;left:10px;display:flex;gap:8px}
+    .badge{font-size:12px;font-weight:700;border-radius:999px;padding:6px 10px;background:#ffffffcc;color:#111827}
+    .badge.premium{background:var(--cta);color:#0B4A6A}
+    .hl-content{padding:12px 14px}
+    .hl-content h3{margin:0 0 6px;font-size:16px;color:#1F2937}
+    .hl-content p{margin:0 0 10px;color:var(--subtext);font-size:14px}
+    .hl-meta{display:flex;gap:12px;color:#6B7280;font-size:12px}
+    @media (max-width:960px){.hero-grid{grid-template-columns:1fr;gap:20px}.hero h1{font-size:36px}.card img{height:340px}.nav-links{display:none}.mobile-toggle{display:inline-block}}
+    @media (max-width:960px){.hl-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.hero{padding:12px}.hero h1{font-size:30px}.card img{height:280px}.btn{padding:9px 14px}.hl-grid{grid-template-columns:1fr}}
+    .ask{max-width:1100px;margin:32px auto;padding:36px 28px;background:linear-gradient(180deg,#6DC8FF 0%,#58B6F0 100%);border-radius:22px;box-shadow:0 10px 28px rgba(17,24,39,.12);color:#ffffff}
+    .ask-title{font-size:28px;line-height:1.25;text-align:center;margin:0 0 10px}
+    .ask-sub{text-align:center;opacity:.95;margin:0 0 18px}
+    .ask-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+    .pill{background:#fff;color:#0B4A6A;border-radius:999px;padding:8px 14px;font-weight:700}
+    .ask-demo{margin-top:18px;display:flex;justify-content:center}
+    .ask-card{background:#ffffff;border-radius:16px;box-shadow:0 8px 20px rgba(17,24,39,.12);padding:14px 16px;max-width:720px;width:100%;display:flex;align-items:center;gap:12px}
+    .ask-card-avatar{height:36px;width:36px;border-radius:50%;background:#FFF8ED;display:flex;align-items:center;justify-content:center}
+    .ask-q{color:#1F2937;font-weight:700}
+    .ask-a{color:#6B7280}
+    .section{max-width:1100px;margin:40px auto;padding:0 24px}
+    .section-title{font-size:32px;line-height:1.2;margin:0 0 8px;color:var(--primary-text);text-align:center}
+    .section-sub{color:var(--subtext);text-align:center;margin:0 0 22px}
+    .kids-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+    .kids-list{background:#fff;border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(17,24,39,.08)}
+    .kids-item{display:flex;align-items:center;gap:10px;padding:8px 0;color:#1F2937}
+    .kids-item .dot{height:10px;width:10px;border-radius:50%;background:var(--cta)}
+    .kids-media{position:relative;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 22px rgba(17,24,39,.12)}
+    .kids-media img{width:100%;height:280px;object-fit:cover}
+    .kids-ribbon{position:absolute;left:14px;top:14px;background:#FFE08A;color:#5A3D27;padding:6px 10px;border-radius:999px;font-weight:800}
+    .kids-foot{position:absolute;left:14px;bottom:14px;background:#ffffffcc;color:#0B4A6A;padding:6px 10px;border-radius:999px;font-weight:800}
+    .pricing{background:rgba(255,248,237,.7);padding:30px 0}
+    .pricing-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:0 24px}
+    .pricing-card{background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(17,24,39,.12);padding:18px;text-align:center;transform:translateY(0);transition:transform .25s ease, box-shadow .25s ease}
+    .pricing-card:hover{transform:translateY(-4px);box-shadow:0 16px 28px rgba(17,24,39,.14)}
+    .price{font-size:30px;font-weight:800;color:#1F2937;margin:8px 0}
+    .pricing-features{color:#6B7280;font-size:14px;display:grid;gap:6px;margin:10px 0}
+    .testimonials{max-width:1100px;margin:30px auto;padding:0 24px}
+    .t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .t-card{background:#fff;border-radius:16px;box-shadow:0 6px 18px rgba(17,24,39,.1);padding:14px}
+    .t-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .t-avatar{height:36px;width:36px;border-radius:50%;background:#FFF8ED;display:flex;align-items:center;justify-content:center}
+    .stars{color:#F59E0B}
+    .fade-up{opacity:0;transform:translateY(16px);transition:opacity .5s ease, transform .5s ease}
+    .fade-up.in{opacity:1;transform:translateY(0)}
+    @media (max-width:960px){.kids-grid{grid-template-columns:1fr}.pricing-grid{grid-template-columns:repeat(2,1fr)}.t-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.pricing-grid{grid-template-columns:1fr}.t-grid{grid-template-columns:1fr}}
+    .market{background:linear-gradient(180deg,#8B5E3C 0%,#6F4A2D 100%);padding:38px 0;color:#fff}
+    .market-inner{max-width:1100px;margin:0 auto;padding:0 24px}
+    .market-title{text-align:center;font-size:30px;font-weight:800;margin:0 0 8px}
+    .market-sub{text-align:center;opacity:.9;margin-bottom:22px}
+    .market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .market-card{background:#ffffff14;border:1px solid #ffffff26;border-radius:18px;padding:18px;backdrop-filter:blur(4px);transition:transform .25s ease, box-shadow .25s ease}
+    .market-card:hover{transform:translateY(-4px);box-shadow:0 16px 28px rgba(0,0,0,.18)}
+    .market-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .market-icon{height:36px;width:36px;border-radius:10px;background:#FFF8ED;color:#5A3D27;display:flex;align-items:center;justify-content:center;font-weight:800}
+    .market-name{font-weight:800}
+    .market-desc{color:#F3F4F6}
+    .mini-cta{display:inline-block;margin-top:10px;background:var(--cta);color:#0B4A6A;border:none;border-radius:999px;padding:8px 12px;font-weight:800;box-shadow:0 6px 16px rgba(109,200,255,.35);cursor:pointer}
+    .newsletter{background:rgba(255,248,237,.9);padding:28px 0}
+    .newsletter-inner{max-width:900px;margin:0 auto;padding:0 24px;text-align:center}
+    .newsletter-form{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .newsletter-form input{height:42px;border:1px solid #E5E7EB;border-radius:12px;padding:0 12px;min-width:260px}
+    .footer{background:#fff;color:#6B7280;padding:26px 24px}
+    .footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:18px;align-items:start}
+    .footer-brand{color:#1F2937;font-weight:800;font-size:18px}
+    .footer-desc{margin-top:6px;max-width:360px}
+    .footer-col h4{color:#1F2937;margin:0 0 8px;font-weight:800}
+    .footer-inner a{color:#6B7280;text-decoration:none;padding:4px 0;display:block}
+    .footer-inner a:hover{color:var(--cta)}
+    .footer-bottom{max-width:1100px;margin:10px auto 0;display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #E5E7EB;padding-top:10px}
+    .footer-links a{color:#6B7280;text-decoration:none;margin:0 6px}
+    .footer-links a:hover{color:var(--cta)}
+    @media (max-width:960px){.market-grid{grid-template-columns:repeat(2,1fr)}.footer-inner{grid-template-columns:1fr 1fr}}
+    @media (max-width:520px){.market-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    function builder(tag, props, children){
+      const el=document.createElement(tag);
+      if(props){
+        for(const k in props){
+          const v=props[k];
+          if(k==='class') el.className=v;
+          else if(k==='style' && typeof v==='object') Object.assign(el.style,v);
+          else if(k.startsWith('on') && typeof v==='function') el.addEventListener(k.slice(2).toLowerCase(),v);
+          else el.setAttribute(k,v);
+        }
+      }
+      if(typeof children==='string') el.textContent=children;
+      else if(Array.isArray(children)) children.forEach(c=>el.appendChild(typeof c==='string'?document.createTextNode(c):c));
+      return el;
+    }
+
+    const app=document.getElementById('app');
+
+    const header=builder('header',{class:'nav'},[
+      builder('div',{class:'brand'},[
+        builder('img',{class:'brand-logo',src:'res/Logotipo_JornalPetEOutrosBichos.jpg',alt:'Logo PET'}),
+      ]),
+      builder('nav',{class:'nav-links'},[
+        builder('a',{href:'#'},'Home'),
+        builder('a',{href:'#'},'Notícias'),
+        builder('a',{href:'#'},'Kids'),
+        builder('a',{href:'#'},'Planos'),
+        builder('a',{href:'#'},'Marketplace'),
+        builder('a',{href:'admin.html'},'Painel')
+      ]),
+      builder('div',{class:'nav-actions'},[
+        builder('div',{class:'icon','aria-hidden':'true'},'🔍'),
+        builder('div',{class:'icon','aria-hidden':'true'},'🔔'),
+        builder('button',{class:'btn btn-cta'},'Entre pro Clube'),
+        builder('button',{class:'mobile-toggle',id:'mobileToggle'},'☰')
+      ])
+    ]);
+
+    const hero=builder('section',{class:'hero'},[
+      builder('div',{class:'hero-grid'},[
+        builder('div',null,[
+          builder('h1',null,'Um jornal feito pra quem ama pets 🐾'),
+          builder('p',{class:'lead'},'Notícias, curiosidades, dicas e diversão — tudo em um só lugar.'),
+          builder('div',{class:'cta-row'},[
+            builder('button',{class:'btn btn-cta'},'Experimentar 7 dias grátis')
+          ]),
+          builder('div',{class:'features'},[
+            builder('div',null,'✔ Kids Friendly'),
+            builder('div',null,'✔ Conteúdo validado')
+          ])
+        ]),
+        builder('div',{class:'card'},[
+          builder('img',{alt:'Cão correndo em campo',src:'https://images.weserv.nl/?url=images.unsplash.com/photo-1558788353-f76d92427f16&q=80&w=1200&h=800&fit=cover'})
+        ])
+      ])
+    ]);
+
+    app.appendChild(header);
+    app.appendChild(hero);
+    const backdrop=builder('div',{class:'mobile-backdrop',id:'mobileBackdrop'});
+    const drawer=builder('div',{class:'mobile-drawer',id:'mobileDrawer'},[
+      builder('a',{class:'mobile-link',href:'#'},'Home'),
+      builder('a',{class:'mobile-link',href:'#'},'Notícias'),
+      builder('a',{class:'mobile-link',href:'#'},'Kids'),
+      builder('a',{class:'mobile-link',href:'#'},'Planos'),
+      builder('a',{class:'mobile-link',href:'#'},'Marketplace'),
+      builder('a',{class:'mobile-link',href:'admin.html'},'Painel')
+    ]);
+    document.body.appendChild(backdrop);
+    document.body.appendChild(drawer);
+    document.getElementById('mobileToggle').addEventListener('click',()=>{drawer.classList.add('open');backdrop.style.display='block'});
+    backdrop.addEventListener('click',()=>{drawer.classList.remove('open');backdrop.style.display='none'});
+    const highlights=builder('section',{class:'highlights'},[
+      builder('h2',{class:'hl-title'},'Destaques da Semana'),
+      builder('p',{class:'hl-subtitle'},'As matérias mais lidas e importantes para você e seu pet'),
+      builder('div',{class:'hl-grid'},[
+        (function(){
+          const card=builder('article',{class:'hl-card'},[
+            builder('img',{src:'https://images.weserv.nl/?url=images.unsplash.com/photo-1548199973-03cce0bbc87b&q=80&w=1200&h=800&fit=cover',alt:'Filhote brincando'}),
+            builder('div',{class:'hl-badges'},[
+              builder('span',{class:'badge'},'Filhotes')
+            ]),
+            builder('div',{class:'hl-content'},[
+              builder('h3',null,'10 brincadeiras essenciais para o desenvolvimento do seu filhote'),
+              builder('p',null,'Descubra atividades que estimulam a mente e o corpo do seu pet desde cedo.'),
+              builder('div',{class:'hl-meta'},[
+                builder('span',null,'Ana Costa'),
+                builder('span',null,'5 min')
+              ])
+            ])
+          ]);
+          return card;
+        })(),
+        (function(){
+          const card=builder('article',{class:'hl-card'},[
+            builder('img',{src:'https://www.petsupport.com.br/wp-content/uploads/2021/07/veterinario-para-gatos.png.webp',alt:'Gato no veterinário'}),
+            builder('div',{class:'hl-badges'},[
+              builder('span',{class:'badge'},'Saúde'),
+              builder('span',{class:'badge premium'},'Premium')
+            ]),
+            builder('div',{class:'hl-content'},[
+              builder('h3',null,'Quando levar seu gato ao veterinário: sinais de alerta'),
+              builder('p',null,'Entenda os principais sintomas que requerem atenção profissional imediata.'),
+              builder('div',{class:'hl-meta'},[
+                builder('span',null,'Dra. Mendes'),
+                builder('span',null,'7 min')
+              ])
+            ])
+          ]);
+          return card;
+        })(),
+        (function(){
+          const card=builder('article',{class:'hl-card'},[
+            builder('img',{src:'https://cisavet.com.br/arquivos/banco-de-imagens/categoria-1/pets-criancas-e-cuidados-20170920114238.jpg',alt:'Adestramento'}),
+            builder('div',{class:'hl-badges'},[
+              builder('span',{class:'badge'},'Comportamento')
+            ]),
+            builder('div',{class:'hl-content'},[
+              builder('h3',null,'Adestramento positivo: técnicas que realmente funcionam'),
+              builder('p',null,'Métodos para educar com amor, respeito e resultados duradouros.'),
+              builder('div',{class:'hl-meta'},[
+                builder('span',null,'Carlos Medeiros'),
+                builder('span',null,'4 min')
+              ])
+            ])
+          ]);
+          return card;
+        })(),
+        (function(){
+          const card=builder('article',{class:'hl-card'},[
+            builder('img',{src:'https://images.weserv.nl/?url=images.unsplash.com/photo-1518791841217-8f162f1e1131&q=80&w=1200&h=800&fit=cover',alt:'Gatinho para adoção'}),
+            builder('div',{class:'hl-badges'},[
+              builder('span',{class:'badge'},'Adoção')
+            ]),
+            builder('div',{class:'hl-content'},[
+              builder('h3',null,'Guia completo para adotar seu primeiro gatinho'),
+              builder('p',null,'Tudo o que você precisa saber antes de dar um lar a um felino.'),
+              builder('div',{class:'hl-meta'},[
+                builder('span',null,'Marina Santos'),
+                builder('span',null,'8 min')
+              ])
+            ])
+          ]);
+          return card;
+        })(),
+        (function(){
+          const card=builder('article',{class:'hl-card'},[
+            builder('img',{src:'https://tudosobrecachorros.com.br/wp-content/uploads/alimentacao-natural-caes-766x511.jpg',alt:'Nutrição pet'}),
+            builder('div',{class:'hl-badges'},[
+              builder('span',{class:'badge'},'Nutrição'),
+              builder('span',{class:'badge premium'},'Premium')
+            ]),
+            builder('div',{class:'hl-content'},[
+              builder('h3',null,'Ração natural vs. industrializada: qual é a melhor?'),
+              builder('p',null,'Comparamos prós e contras de cada opção alimentar para seu pet.'),
+              builder('div',{class:'hl-meta'},[
+                builder('span',null,'Dra. Júlia Ramos'),
+                builder('span',null,'5 min')
+              ])
+            ])
+          ]);
+          return card;
+        })(),
+        (function(){
+          const card=builder('article',{class:'hl-card'},[
+            builder('img',{src:'https://cisavet.com.br/arquivos/banco-de-imagens/categoria-1/pets-criancas-e-cuidados-20170920114238.jpg',alt:'Convivência com crianças'}),
+            builder('div',{class:'hl-badges'},[
+              builder('span',{class:'badge'},'Convivência')
+            ]),
+            builder('div',{class:'hl-content'},[
+              builder('h3',null,'Pets e crianças: como criar uma relação harmoniosa'),
+              builder('p',null,'Dicas para garantir segurança e amizade entre os pequenos e os animais.'),
+              builder('div',{class:'hl-meta'},[
+                builder('span',null,'Roberta Dias'),
+                builder('span',null,'6 min')
+              ])
+            ])
+          ]);
+          return card;
+        })()
+      ])
+    ]);
+    app.appendChild(highlights);
+    const ask=builder('section',{class:'ask'},[
+      builder('h2',{class:'ask-title'},'Pergunte ao Nico e à Pipoca — cuidados simples em segundos'),
+      builder('p',{class:'ask-sub'},'Respostas rápidas para dúvidas sobre seu pet com informações validadas por veterinários'),
+      builder('div',{class:'ask-actions'},[
+        builder('button',{class:'btn btn-cta'},'Perguntar agora'),
+        builder('span',{class:'pill'},'Ver planos Premium')
+      ]),
+      builder('div',{class:'ask-demo'},[
+        builder('div',{class:'ask-card'},[
+          builder('div',{class:'ask-card-avatar'},'🐶'),
+          builder('div',null,[
+            builder('div',{class:'ask-q'},'“Quantas vezes meu gato precisa de banho?”'),
+            builder('div',{class:'ask-a'},'Em geral, gatos não precisam de banhos frequentes; escovação regular é suficiente.')
+          ])
+        ])
+      ])
+    ]);
+    app.appendChild(ask);
+    const kids=builder('section',{class:'section fade-up'},[
+      builder('h2',{class:'section-title'},'Diversão e aprendizado para os pequenos'),
+      builder('p',{class:'section-sub'},'Conteúdo seguro, educativo e super divertido para crianças aprenderem sobre pets'),
+      builder('div',{class:'kids-grid'},[
+        builder('div',{class:'kids-list'},[
+          builder('div',{class:'kids-item'},[builder('div',{class:'dot'}), 'Jogos interativos']),
+          builder('div',{class:'kids-item'},[builder('div',{class:'dot'}), 'Histórias ilustradas']),
+          builder('div',{class:'kids-item'},[builder('div',{class:'dot'}), 'Conteúdos fofos com Pipoca e Nico como personagens']),
+          builder('div',{class:'kids-item'},[builder('div',{class:'dot'}), 'Quiz Pet Expert'])
+        ]),
+        builder('div',{class:'kids-media'},[
+          builder('img',{src:'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=1200&auto=format&fit=crop',alt:'Criança com cachorro',onerror:(e)=>{e.target.src='https://via.placeholder.com/1200x800?text=Kids'}}),
+          builder('div',{class:'kids-ribbon'},'Kids'),
+          builder('div',{class:'kids-foot'},'100% seguro e educativo')
+        ])
+      ])
+    ]);
+    app.appendChild(kids);
+    const pricing=builder('section',{class:'pricing fade-up'},[
+      builder('h2',{class:'section-title'},'Escolha seu plano ideal'),
+      builder('p',{class:'section-sub'},'Todos os planos incluem 7 dias grátis. Cancele quando quiser.'),
+      builder('div',{class:'pricing-grid'},[
+        builder('div',{class:'pricing-card'},[
+          builder('div',null,'Pet Lover'),
+          builder('div',{class:'price'},'R$ 9,90'),
+          builder('div',{class:'pricing-features'},[
+            builder('div',null,'Acesso às notícias'),
+            builder('div',null,'Kids básico'),
+            builder('div',null,'Newsletter')
+          ]),
+          builder('button',{class:'btn btn-outline'},'Assinar')
+        ]),
+        builder('div',{class:'pricing-card'},[
+          builder('div',null,'Premium Pet'),
+          builder('div',{class:'price'},'R$ 19,90'),
+          builder('div',{class:'pricing-features'},[
+            builder('div',null,'Tudo do Pet Lover'),
+            builder('div',null,'Kids completo'),
+            builder('div',null,'Marketplace')
+          ]),
+          builder('button',{class:'btn btn-cta'},'Experimentar grátis')
+        ]),
+        builder('div',{class:'pricing-card'},[
+          builder('div',null,'Clube VIP'),
+          builder('div',{class:'price'},'R$ 39,90'),
+          builder('div',{class:'pricing-features'},[
+            builder('div',null,'Benefícios exclusivos'),
+            builder('div',null,'Eventos e comunidade'),
+            builder('div',null,'Descontos parceiros')
+          ]),
+          builder('button',{class:'btn btn-outline'},'Assinar')
+        ])
+      ])
+    ]);
+    app.appendChild(pricing);
+    const testimonials=builder('section',{class:'testimonials fade-up'},[
+      builder('h2',{class:'section-title'},'O que nossos leitores dizem'),
+      builder('p',{class:'section-sub'},'Mais de 50.000 leitores já confiam no Pet'),
+      builder('div',{class:'t-grid'},[
+        builder('div',{class:'t-card'},[
+          builder('div',{class:'t-head'},[
+            builder('div',{class:'t-avatar'},'🐾'),
+            builder('div',{class:'stars'},'★★★★★')
+          ]),
+          builder('div',null,'Conteúdo excelente, aprovo totalmente! As dicas de convivência são incríveis.')
+        ]),
+        builder('div',{class:'t-card'},[
+          builder('div',{class:'t-head'},[
+            builder('div',{class:'t-avatar'},'🐱'),
+            builder('div',{class:'stars'},'★★★★★')
+          ]),
+          builder('div',null,'A área Kids é linda! Meu filho ama o Nico e aprende muito.')
+        ]),
+        builder('div',{class:'t-card'},[
+          builder('div',{class:'t-head'},[
+            builder('div',{class:'t-avatar'},'🐶'),
+            builder('div',{class:'stars'},'★★★★★')
+          ]),
+          builder('div',null,'Notícias sempre atualizadas e responsáveis. Recomendo o Premium!')
+        ])
+      ])
+    ]);
+    app.appendChild(testimonials);
+    const market=builder('section',{class:'market fade-up'},[
+      builder('div',{class:'market-inner'},[
+        builder('div',{class:'market-title'},'Marketplace de Parceiros'),
+        builder('div',{class:'market-sub'},'Descontos exclusivos em produtos e serviços para seu pet'),
+        builder('div',{class:'market-grid'},[
+          builder('div',{class:'market-card'},[
+            builder('div',{class:'market-head'},[
+              builder('div',{class:'market-icon'},'🛒'),
+              builder('div',{class:'market-name'},'PetShop Premium')
+            ]),
+            builder('div',{class:'market-desc'},'15% de desconto em produtos selecionados'),
+            builder('button',{class:'mini-cta'},'Entrar no Marketplace')
+          ]),
+          builder('div',{class:'market-card'},[
+            builder('div',{class:'market-head'},[
+              builder('div',{class:'market-icon'},'🩺'),
+              builder('div',{class:'market-name'},'Rede VetCare')
+            ]),
+            builder('div',{class:'market-desc'},'20% off em consultas veterinárias'),
+            builder('button',{class:'mini-cta'},'Entrar no Marketplace')
+          ]),
+          builder('div',{class:'market-card'},[
+            builder('div',{class:'market-head'},[
+              builder('div',{class:'market-icon'},'🍖'),
+              builder('div',{class:'market-name'},'Ração S Cia')
+            ]),
+            builder('div',{class:'market-desc'},'Frete grátis em compras acima de R$ 80'),
+            builder('button',{class:'mini-cta'},'Entrar no Marketplace')
+          ])
+        ])
+      ])
+    ]);
+    app.appendChild(market);
+    const news=builder('section',{class:'newsletter fade-up'},[
+      builder('div',{class:'newsletter-inner'},[
+        builder('h3',null,'Receba novidades e dicas práticas no seu e-mail'),
+        builder('p',null,'Newsletter semanal com o melhor conteúdo sobre pets'),
+        builder('div',{class:'newsletter-form'},[
+          builder('input',{type:'email',placeholder:'Seu e-mail'}),
+          builder('button',{class:'btn btn-cta'},'Quero receber')
+        ])
+      ])
+    ]);
+    app.appendChild(news);
+    const footer=builder('footer',{class:'footer'},[
+      builder('div',{class:'footer-inner'},[
+        builder('div',null,[
+          builder('div',{class:'footer-brand'},'Pets e Outros Bichos'),
+          builder('div',{class:'footer-desc'},'O jornal digital feito para quem ama pets. Notícias, dicas e diversão em um só lugar.')
+        ]),
+        builder('div',{class:'footer-col'},[
+          builder('h4',null,'Seções'),
+          builder('a',{href:'#'},'Notícias'),
+          builder('a',{href:'#'},'Saúde'),
+          builder('a',{href:'#'},'Comportamento'),
+          builder('a',{href:'#'},'Kids'),
+          builder('a',{href:'#'},'Marketplace')
+        ]),
+        builder('div',{class:'footer-col'},[
+          builder('h4',null,'Planos'),
+          builder('a',{href:'#'},'Pet Lover'),
+          builder('a',{href:'#'},'Premium Pet'),
+          builder('a',{href:'#'},'Clube VIP'),
+          builder('a',{href:'#'},'Comparar Planos')
+        ]),
+        builder('div',{class:'footer-col'},[
+          builder('h4',null,'Contato'),
+          builder('a',{href:'#'},'Sobre Nós'),
+          builder('a',{href:'#'},'Anuncie'),
+          builder('a',{href:'#'},'Contato'),
+          builder('a',{href:'#'},'Ajuda')
+        ])
+      ]),
+      builder('div',{class:'footer-bottom'},[
+        builder('div',{class:'footer-copy'},'© 2025 Pets e Outros Bichos. Todos os direitos reservados.'),
+        builder('div',{class:'footer-links'},[
+          builder('a',{href:'#'},'Termos de Uso'),
+          builder('span',null,'•'),
+          builder('a',{href:'#'},'Política de Privacidade'),
+          builder('span',null,'•'),
+          builder('a',{href:'#'},'Cookies')
+        ])
+      ])
+    ]);
+    app.appendChild(footer);
+    const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in')}})},{threshold:.2});
+    document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>
+    .mobile-backdrop{position:fixed;inset:0;background:rgba(17,24,39,.4);backdrop-filter:blur(2px);display:none;z-index:40}
+    .mobile-drawer{position:fixed;top:0;right:-100%;width:72%;max-width:320px;height:100%;background:#fff;box-shadow:-16px 0 32px rgba(17,24,39,.18);z-index:50;padding:20px;display:flex;flex-direction:column;gap:14px;transition:right .28s ease}
+    .mobile-drawer.open{right:0}
+    .mobile-link{color:#1F2937;text-decoration:none;font-weight:700;padding:10px 0;border-bottom:1px solid #E5E7EB}

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Painel Admin • Pets e Outros Bichos</title>
+  <style>
+    :root{--primary-text:#8B5E3C;--subtext:#9CA3AF;--cta:#6DC8FF;--bg:#ffffff;--bg-accent:#FFF8ED;--dark:#111827}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;color:var(--dark);background:var(--bg)}
+    .admin-top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:linear-gradient(180deg,var(--bg) 0%,#F9FAFB 100%);box-shadow:0 8px 24px rgba(17,24,39,.08),0 2px 6px rgba(17,24,39,.04)}
+    .brand{font-weight:800;color:#1F2937}
+    .top-actions{display:flex;gap:10px}
+    .btn{appearance:none;border:none;cursor:pointer;border-radius:12px;padding:9px 14px;font-weight:700}
+    .btn-outline{background:var(--bg);color:#1F2937;border:1px solid #E5E7EB}
+    .btn-cta{background:var(--cta);color:#0B4A6A;box-shadow:0 6px 16px rgba(109,200,255,.35)}
+    .shell{max-width:1100px;margin:20px auto;padding:0 20px}
+    .admin-roles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0}
+    .role-card{background:#FFF8ED;border:1px solid #F5E7D6;border-radius:12px;padding:10px;text-align:center}
+    .role-name{font-weight:800;color:#8B5E3C}
+    .admin-tabs{display:flex;gap:10px;margin:10px 0 14px;flex-wrap:wrap}
+    .tab-btn{background:#F3F4F6;border:none;border-radius:999px;padding:8px 12px;cursor:pointer}
+    .tab-btn.active{background:var(--cta);color:#0B4A6A;box-shadow:0 6px 16px rgba(109,200,255,.35)}
+    .admin-body{background:#fff;border:1px solid #E5E7EB;border-radius:16px;box-shadow:0 8px 24px rgba(17,24,39,.08);padding:18px}
+    .field{display:grid;gap:6px;margin-bottom:10px}
+    .field input,.field textarea,.field select{border:1px solid #E5E7EB;border-radius:10px;padding:10px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{border-bottom:1px solid #E5E7EB;padding:8px;text-align:left}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:960px){.admin-roles{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.admin-roles{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="admin-top">
+    <div class="brand">Pets e Outros Bichos — Painel Admin</div>
+    <div class="top-actions">
+      <a class="btn btn-outline" href="index.html">Voltar ao site</a>
+      <button class="btn btn-cta" id="saveAll">Salvar alterações</button>
+    </div>
+  </div>
+  <div id="app" class="shell"></div>
+  <script>
+    function builder(tag, props, children){
+      const el=document.createElement(tag);
+      if(props){
+        for(const k in props){
+          const v=props[k];
+          if(k==='class') el.className=v;
+          else if(k==='style' && typeof v==='object') Object.assign(el.style,v);
+          else if(k.startsWith('on') && typeof v==='function') el.addEventListener(k.slice(2).toLowerCase(),v);
+          else el.setAttribute(k,v);
+        }
+      }
+      if(typeof children==='string') el.textContent=children;
+      else if(Array.isArray(children)) children.forEach(c=>el.appendChild(typeof c==='string'?document.createTextNode(c):c));
+      return el;
+    }
+    const app=document.getElementById('app');
+    function roles(){
+      return builder('div',{class:'admin-roles'},[
+        builder('div',{class:'role-card'},['👑 ',builder('div',{class:'role-name'},'Admin'),builder('div',null,'Tudo')]),
+        builder('div',{class:'role-card'},['✍️ ',builder('div',{class:'role-name'},'Editor'),builder('div',null,'Publica e edita')]),
+        builder('div',{class:'role-card'},['🧸 ',builder('div',{class:'role-name'},'Kids Manager'),builder('div',null,'Histórias e quizzes')]),
+        builder('div',{class:'role-card'},['📊 ',builder('div',{class:'role-name'},'Analista'),builder('div',null,'Métricas')]),
+        builder('div',{class:'role-card'},['🧪 ',builder('div',{class:'role-name'},'Beta'),builder('div',null,'Testes')])
+      ]);
+    }
+    function tabConteudo(){
+      return builder('div',null,[
+        builder('div',{class:'grid-2'},[
+          builder('div',{class:'field'},[builder('label',null,'Título'),builder('input',{type:'text',placeholder:'Título da matéria'})]),
+          builder('div',{class:'field'},[builder('label',null,'Categoria'),builder('select',null,[builder('option',null,'Notícias'),builder('option',null,'Saúde'),builder('option',null,'Comportamento'),builder('option',null,'Kids')])])
+        ]),
+        builder('div',{class:'field'},[builder('label',null,'Resumo'),builder('input',{type:'text',placeholder:'Resumo curto'})]),
+        builder('div',{class:'field'},[builder('label',null,'Conteúdo'),builder('textarea',{rows:'6',placeholder:'Escreva aqui'})]),
+        builder('div',{class:'grid-2'},[
+          builder('div',{class:'field'},[builder('label',null,'Tags'),builder('input',{type:'text',placeholder:'Ex.: gatos, curiosidades'})]),
+          builder('div',{class:'field'},[builder('label',null,'Upload de imagens'),builder('input',{type:'file',multiple:'multiple'})])
+        ]),
+        builder('div',{class:'grid-2'},[
+          builder('div',null,[builder('input',{type:'checkbox',id:'opt-prem'}),builder('label',{for:'opt-prem'},' Premium')]),
+          builder('div',null,[builder('input',{type:'checkbox',id:'opt-dest'}),builder('label',{for:'opt-dest'},' Destaque na Home')])
+        ]),
+        builder('div',{class:'grid-2'},[
+          builder('button',{class:'btn btn-outline'},'Salvar rascunho'),
+          builder('button',{class:'btn btn-cta'},'Publicar agora')
+        ]),
+        builder('h3',null,'Lista de posts'),
+        builder('table',{class:'table'},[
+          builder('thead',null,[builder('tr',null,[builder('th',null,'Título'),builder('th',null,'Categoria'),builder('th',null,'Status')])]),
+          builder('tbody',null,[builder('tr',null,[builder('td',null,'Como cortar unhas do gato'),builder('td',null,'Saúde'),builder('td',null,'Publicado')])])
+        ])
+      ]);
+    }
+    function tabKids(){
+      return builder('div',null,[
+        builder('div',{class:'field'},[builder('label',null,'Imagem de capa'),builder('input',{type:'file'})]),
+        builder('div',{class:'field'},[builder('label',null,'Título'),builder('input',{type:'text',placeholder:'O mistério do biscoito desaparecido'})]),
+        builder('div',{class:'field'},[builder('label',null,'Página 1'),builder('textarea',{rows:'3'})]),
+        builder('div',{class:'field'},[builder('label',null,'Página 2'),builder('textarea',{rows:'3'})]),
+        builder('div',{class:'field'},[builder('label',null,'Final'),builder('textarea',{rows:'3',placeholder:'Moral divertida e CTA'})]),
+        builder('button',{class:'btn btn-cta'},'Publicar história')
+      ]);
+    }
+    function tabIA(){
+      return builder('div',null,[
+        builder('div',{class:'cards'},[
+          builder('div',{class:'role-card'},['Perguntas mais buscadas',' • Pode dar banho no gato? ✔️',' • Ração úmida todo dia? ⚠️']),
+          builder('div',{class:'role-card'},['Limites da versão',' Gratuita: 3 respostas/dia',' Premium: ilimitado']),
+          builder('div',{class:'role-card'},['Treinar modelo',' Baseia em artigos publicados'])
+        ]),
+        builder('button',{class:'btn btn-outline'},'Aprovar respostas')
+      ]);
+    }
+    function tabAssinaturas(){
+      return builder('div',null,[
+        builder('table',{class:'table'},[
+          builder('thead',null,[builder('tr',null,[builder('th',null,'Assinante'),builder('th',null,'Plano'),builder('th',null,'Status')])]),
+          builder('tbody',null,[builder('tr',null,[builder('td',null,'João'),builder('td',null,'Premium Pet'),builder('td',null,'Ativo')])])
+        ]),
+        builder('div',{class:'grid-2'},[
+          builder('button',{class:'btn btn-outline'},'Reembolsar assinatura'),
+          builder('button',{class:'btn btn-cta'},'Atualizar plano')
+        ])
+      ]);
+    }
+    function tabMarketplace(){
+      return builder('div',null,[
+        builder('div',{class:'cards'},[
+          builder('div',{class:'role-card'},['Cadastrar produto parceiro']),
+          builder('div',{class:'role-card'},['Gerenciar links de afiliados']),
+          builder('div',{class:'role-card'},['Performance de cliques'])
+        ])
+      ]);
+    }
+    function tabAnalytics(){
+      return builder('div',null,[
+        builder('div',{class:'cards'},[
+          builder('div',{class:'role-card'},['Visualizações por categoria',' 🐶 42% • 🐱 31%']),
+          builder('div',{class:'role-card'},['Mais lido',' Como cortar unhas do gato']),
+          builder('div',{class:'role-card'},['Novos assinantes',' +127'])
+        ])
+      ]);
+    }
+    function tabConfig(){
+      return builder('div',null,[
+        builder('div',{class:'field'},[builder('label',null,'Nome do portal'),builder('input',{type:'text',value:'Pets e Outros Bichos'})]),
+        builder('div',{class:'field'},[builder('label',null,'E-mail automático'),builder('input',{type:'email',placeholder:'contato@exemplo.com'})]),
+        builder('div',{class:'field'},[builder('label',null,'Integrações'),builder('input',{type:'text',placeholder:'Firebase, Analytics, Stripe, IA'})]),
+        builder('button',{class:'btn btn-outline'},'Salvar')
+      ]);
+    }
+    (function init(){
+      const rolesGrid=roles();
+      const tabs=['Conteúdo','Kids Studio','IA Assistant','Assinaturas','Marketplace','Analytics','Configurações'];
+      let active='Conteúdo';
+      const tabBar=builder('div',{class:'admin-tabs'},tabs.map(name=>{
+        const b=builder('button',{class:'tab-btn'+(name===active?' active':''),onClick:()=>{active=name;update()}},name);
+        return b;
+      }));
+      const body=builder('div',{class:'admin-body'});
+      function update(){
+        Array.from(tabBar.children).forEach(btn=>btn.classList.toggle('active',btn.textContent===active));
+        body.innerHTML='';
+        body.appendChild(active==='Conteúdo'?tabConteudo():active==='Kids Studio'?tabKids():active==='IA Assistant'?tabIA():active==='Assinaturas'?tabAssinaturas():active==='Marketplace'?tabMarketplace():active==='Analytics'?tabAnalytics():tabConfig());
+      }
+      update();
+      app.appendChild(rolesGrid);
+      app.appendChild(tabBar);
+      app.appendChild(body);
+    })();
+  </script>
+</body>
+</html>
